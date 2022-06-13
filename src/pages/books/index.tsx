@@ -3,10 +3,16 @@ import React from "react";
 import BookCard from "../../components/BookCard";
 import Navbar from "../../components/Navbar";
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
+import { GetStaticProps, NextPage } from "next";
+import { Book } from "@prisma/client";
+import { prisma } from "../../db/client";
 
-const arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+interface props {
+  books: Book[];
+}
 
-function BookList() {
+const BookList: NextPage<props> = ({ books }) => {
+  console.log(books);
   return (
     <>
       <Navbar />
@@ -15,26 +21,33 @@ function BookList() {
       </Flex>
 
       <SimpleGrid templateColumns="repeat(auto-fill, minmax(250px, 1fr))">
-        {arr.map((book) => {
-          return (
-            <div key={book + "1"} style={{ margin: 10, padding: 0 }}>
-              <GridItem padding={0} margin={0}>
-                <BookCard
-                  isAvaliable={true}
-                  key={book}
-                  totalAmt={12}
-                  title="lorem"
-                  bookAuthors={["John Doe", "Jane Doe"]}
-                  isbn={93849839843}
-                  bookCoverUrl="https://books.google.com/books/content?id=2xaUrgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-                />
-              </GridItem>
-            </div>
-          );
-        })}
+        {books &&
+          books.map((book) => {
+            return (
+              <div key={book.isbn} style={{ margin: 10, padding: 0 }}>
+                <GridItem padding={0} margin={0}>
+                  <BookCard
+                    isAvaliable={true}
+                    key={book.isbn}
+                    title={book.title}
+                    bookAuthors={book.authors}
+                    isbn={book.isbn}
+                    bookCoverUrl={book.thumbnailUrl}
+                  />
+                </GridItem>
+              </div>
+            );
+          })}
       </SimpleGrid>
     </>
   );
-}
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const books = await prisma.book.findMany({});
+  return {
+    props: { books },
+  };
+};
 
 export default BookList;

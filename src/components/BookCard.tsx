@@ -13,13 +13,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Link from "next/link";
 
 interface props {
   isbn: number;
   title: string;
-  bookAuthors?: string[];
-  bookCoverUrl?: string;
-  totalAmt: number;
+  bookAuthors: string[] | null;
+  bookCoverUrl: string | null;
   isAvaliable: boolean;
 }
 
@@ -40,10 +40,23 @@ const socialProfileWithImage: NextPage<props> = ({
         rounded={"md"}
         overflow={"hidden"}
       >
-        <Image h={"120px"} w={"full"} src={bookCoverUrl} objectFit={"cover"} />
+        <Image
+          h={"120px"}
+          w={"full"}
+          src={
+            bookCoverUrl ||
+            "https://cdn-d8.nypl.org/s3fs-public/blogs/J5LVHEL.jpg"
+          }
+          objectFit={"cover"}
+        />
         <Box p={6}>
           <Stack spacing={0} align={"center"} mb={5}>
-            <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
+            <Heading
+              fontSize={"20"}
+              textAlign="center"
+              fontWeight={500}
+              fontFamily={"body"}
+            >
               {title}
             </Heading>
             <Text color={"gray.500"}>
@@ -63,19 +76,21 @@ const socialProfileWithImage: NextPage<props> = ({
               </Text>
             </Stack>
           </Stack>
-          <Button
-            w={"full"}
-            mt={8}
-            bg={useColorModeValue("#151f21", "gray.900")}
-            color={"white"}
-            rounded={"md"}
-            _hover={{
-              transform: "translateY(-2px)",
-              boxShadow: "lg",
-            }}
-          >
-            Details
-          </Button>
+          <Link href={`/books/${isbn}`}>
+            <Button
+              w={"full"}
+              mt={8}
+              bg={useColorModeValue("#151f21", "gray.900")}
+              color={"white"}
+              rounded={"md"}
+              _hover={{
+                transform: "translateY(-2px)",
+                boxShadow: "lg",
+              }}
+            >
+              Details
+            </Button>
+          </Link>
         </Box>
       </Box>
     </Center>

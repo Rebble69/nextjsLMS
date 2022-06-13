@@ -62,7 +62,7 @@ export default function withAction() {
       ? [
           { url: "/", display: "Home" },
           { url: "/books", display: "Books" },
-          { display: "Admin Dashboard", url: "/admin/dashboard" },
+          { display: "Dashboard", url: "/admin/dashboard" },
         ]
       : [
           { url: "/", display: "Home" },
@@ -82,7 +82,7 @@ export default function withAction() {
           <Button onClick={toggleColorMode}>
             {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>
-          <HStack spacing={8} alignItems={"center"}>
+          <HStack spacing={8}>
             <HStack
               as={"nav"}
               spacing={4}
@@ -133,9 +133,8 @@ export default function withAction() {
             </Menu>
           </Flex>
         </Flex>
-
         {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
+          <Box display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
                 <NavLink key={link.url} href={link.url}>
