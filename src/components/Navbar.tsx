@@ -61,12 +61,12 @@ export default function withAction() {
     session?.user?.role == "admin"
       ? [
           { url: "/", display: "Home" },
-          { url: "/booklist", display: "Book List" },
+          { url: "/books", display: "Books" },
           { display: "Admin Dashboard", url: "/admin/dashboard" },
         ]
       : [
           { url: "/", display: "Home" },
-          { url: "/booklist", display: "Book List" },
+          { url: "/books", display: "Books" },
         ];
   return (
     <>
