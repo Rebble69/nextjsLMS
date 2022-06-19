@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -37,7 +37,7 @@ interface NavbarPage {
   display: string;
 }
 
-const NavLink = ({ children, href }: NavLinkProps) => (
+const NavLink: React.FC<NavLinkProps> = ({ children, href }) => (
   <Link
     px={2}
     py={1}
@@ -62,7 +62,7 @@ export default function withAction() {
       ? [
           { url: "/", display: "Home" },
           { url: "/books", display: "Books" },
-          { display: "Dashboard", url: "/admin/dashboard" },
+          { display: "Dashboard", url: "/admin" },
         ]
       : [
           { url: "/", display: "Home" },

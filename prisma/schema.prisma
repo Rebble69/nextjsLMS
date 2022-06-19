@@ -7,6 +7,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Library
+model Book {
+  isbn         Int                @id
+  title        String
+  description  String?
+  thumbnailUrl String?
+  lang         String?
+  categories   CategoriesOnBook[]
+  authors      AuthorsOnBook[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  books CategoriesOnBook[]
+
+  @@unique([name])
+  @@index([name])
+}
+
+model Author {
+  id    Int             @id @default(autoincrement())
+  name  String
+  books AuthorsOnBook[]
+
+  @@unique([name])
+  @@index([name])
+}
+
+model CategoriesOnBook {
+  book       Book     @relation(fields: [bookId], references: [isbn], onDelete: Cascade)
+  bookId     Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+
+
+  @@id([bookId, categoryId])
+}
+
+model AuthorsOnBook {
+  book     Book   @relation(fields: [bookId], references: [isbn], onDelete: Cascade)
+  bookId   Int
+  author   Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
+
+  @@id([bookId, authorId])
+}
+
+// Auth
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -16,16 +66,6 @@ model User {
   role          String?   @default("user")
   accounts      Account[]
   sessions      Session[]
-}
-
-model Book {
-  isbn         Int      @id
-  title        String
-  authors      String[]
-  categories   String[]
-  description  String?
-  subtitle     String?
-  thumbnailUrl String?
 }
 
 model Account {

@@ -4,11 +4,24 @@ import BookCard from "../../components/BookCard";
 import Navbar from "../../components/Navbar";
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import { GetStaticProps, NextPage } from "next";
-import { Book } from "@prisma/client";
+import {
+  Author,
+  AuthorsOnBook,
+  Book,
+  CategoriesOnBook,
+  Category,
+} from "@prisma/client";
 import { prisma } from "../../db/client";
 
 interface props {
-  books: Book[];
+  books: (Book & {
+    authors: (AuthorsOnBook & {
+      author: Author;
+    })[];
+    categories: (CategoriesOnBook & {
+      category: Category;
+    })[];
+  })[];
 }
 
 const BookList: NextPage<props> = ({ books }) => {
@@ -30,7 +43,9 @@ const BookList: NextPage<props> = ({ books }) => {
                     isAvaliable={true}
                     key={book.isbn}
                     title={book.title}
-                    bookAuthors={book.authors}
+                    bookAuthors={book.authors?.map(
+                      (author) => author.author.name
+                    )}
                     isbn={book.isbn}
                     bookCoverUrl={book.thumbnailUrl}
                   />
@@ -44,7 +59,13 @@ const BookList: NextPage<props> = ({ books }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const books = await prisma.book.findMany({});
+  const books = await prisma.book.findMany({
+    include: {
+      authors: { include: { author: true } },
+      categories: { include: { category: true } },
+    },
+  });
+
   return {
     props: { books },
   };
