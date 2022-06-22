@@ -25,7 +25,6 @@ interface props {
 }
 
 const BookList: NextPage<props> = ({ books }) => {
-  console.log(books);
   return (
     <>
       <Navbar />
